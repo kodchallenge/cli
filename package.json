@@ -1,0 +1,13 @@
+{
+  "name": "@kodchallenge/cli",
+  "version": "1.0.0",
+  "main": "src/cli.js",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "kc": "src/cli.js"
+  },
+  "dependencies": {
+    "yargs": "^17.6.2"
+  }
+}
