@@ -1,6 +1,8 @@
 const fs = require("fs")
 const path = require("path")
 
+// Run file g++ runner.cpp solution.cpp -o run && run
+
 const RUNNER_CODE =
     `#include "solution.hpp"
 #include <iostream>
@@ -17,6 +19,7 @@ const SOLUTION_HPP =
     `#ifndef SOLUTION_HPP
 #define SOLUTION_HPP
 #endif
+#include <string> //for std::string type
 
 namespace kod {
     void {FUNCTION_NAME}({FUNCTION_ARGS});
@@ -28,14 +31,14 @@ const SOLUTION_CPP =
 
 namespace kod {
     void {FUNCTION_NAME}({FUNCTION_ARGS}) {
-        throw "Implementation this function";
+        throw std::exception("Implementation this function");
     };
 }`
 
 const types = {
     int: {
         name: "int",
-        parser: (arg) => `stoi(${arg})`
+        parser: (arg) => `std::stoi(${arg})`
     },
     string: {
         name: "std::string",
