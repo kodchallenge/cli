@@ -1,47 +1,41 @@
 const fs = require("fs")
 const path = require("path")
 
-// Run file g++ runner.cpp solution.cpp -o run && run
-
-const RUNNER_CODE =
-    `#include "solution.hpp"
-#include <iostream>
-#include <string>
-#include <cstdlib>
+const MAIN_CODE =
+    `#include "solution.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 int main(int argc, char* argv[]) {
     {VERIABLES}
-    kod::{FUNCTION_NAME}({FUNCTION_ARGS});
+    {FUNCTION_NAME}({FUNCTION_ARGS});
     return 0;
 }`
 
-const SOLUTION_HPP =
+const SOLUTION_H =
     `#ifndef SOLUTION_HPP
 #define SOLUTION_HPP
 #endif
-#include <string> //for std::string type
 
-namespace kod {
-    void {FUNCTION_NAME}({FUNCTION_ARGS});
-}`
+void {FUNCTION_NAME}({FUNCTION_ARGS});
+`
 
-const SOLUTION_CPP =
-    `#include "solution.hpp"
-#include <iostream>
+const SOLUTION_C =
+    `#include "solution.h"
+#include <stdio.h>
 
-namespace kod {
-    void {FUNCTION_NAME}({FUNCTION_ARGS}) {
-        throw std::exception("Implementation this function");
-    };
-}`
+void {FUNCTION_NAME}({FUNCTION_ARGS}) {
+    throw "Implementation this function";
+};`
 
 const types = {
     int: {
         name: "int",
-        parser: (arg) => `std::stoi(${arg})`
+        parser: (arg) => `atoi(${arg})`
     },
     string: {
-        name: "std::string",
+        name: "char*",
         parser: (arg) => `${arg}`
     },
     char: {
@@ -57,23 +51,23 @@ const types = {
 const generate = (dir, langPath, inputs) => {
     const functionName = path.basename(dir).replace(/-./g, x => x[1].toUpperCase());
 
-    const runnerCode = RUNNER_CODE
+    const mainCode = MAIN_CODE
         .replace("{FUNCTION_NAME}", functionName)
         .replace("{VERIABLES}", inputs.map((x, i) => `${types[x.type].name} ${x.name} = ${types[x.type].parser(`argv[${i + 1}]`)};`).join("\n\t") ?? "")
         .replace("{FUNCTION_ARGS}", inputs.map(x => x.name).join(", "))
 
-    const solutionHpp = SOLUTION_HPP
+    const solutionHeader = SOLUTION_H
         .replace("{FUNCTION_NAME}", functionName)
         .replace("{FUNCTION_ARGS}", inputs.map(x => `${types[x.type].name} ${x.name}`).join(", "))
 
-    const solutionCpp = SOLUTION_CPP
+    const solutionFile = SOLUTION_C
         .replace("{FUNCTION_NAME}", functionName)
         .replace("{FUNCTION_ARGS}", inputs.map(x => `${types[x.type].name} ${x.name}`).join(", "))
 
-    fs.writeFileSync(path.join(langPath, "main.cpp"), runnerCode)
-    fs.writeFileSync(path.join(langPath, "solution.hpp"), solutionHpp)
-    fs.writeFileSync(path.join(langPath, "solution.cpp"), solutionCpp)
+    fs.writeFileSync(path.join(langPath, "main.c"), mainCode)
+    fs.writeFileSync(path.join(langPath, "solution.h"), solutionHeader)
+    fs.writeFileSync(path.join(langPath, "solution.c"), solutionFile)
     console.log("Generated 🎉")
 }
 
-exports.generateCpp = generate;
+exports.generateC = generate;
