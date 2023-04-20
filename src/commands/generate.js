@@ -21,7 +21,7 @@ exports.generate = () => {
 
         const dir = args.dir ?? process.cwd();
 
-        const langPath = path.join(dir, "langs", lang)
+        const langPath = path.join(dir, lang)
         fs.mkdirSync(langPath, { recursive: true })
 
 

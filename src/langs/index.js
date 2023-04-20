@@ -1,6 +1,7 @@
 const { generateC } = require("./c");
 const { generateCpp } = require("./cpp");
 const { generateJS } = require("./javascript");
+const { generatePython } = require("./python");
 
 exports.languages = {
     cpp: {
@@ -12,4 +13,7 @@ exports.languages = {
     js:  {
         generate: generateJS
     },
+    py: {
+        generate: generatePython
+    }
 }
