@@ -6,18 +6,23 @@ const { generateTS } = require("./typescript");
 
 exports.languages = {
     cpp: {
-        generate: generateCpp
+        generate: generateCpp,
+        ext: "cpp"
     },
     c:  {
-        generate: generateC
+        generate: generateC,
+        ext: "c"
     },
     js:  {
-        generate: generateJS
+        generate: generateJS,
+        ext: "js"
     },
     ts:  {
-        generate: generateTS
+        generate: generateTS,
+        ext: "ts"
     },
     py: {
-        generate: generatePython
+        generate: generatePython,
+        ext: "py"
     }
 }
