@@ -34,8 +34,9 @@ const types = {
     }
 }
 
-const generate = (dir, langPath, inputs) => {
-    const functionName = path.basename(dir).replace(/-./g, x => x[1].toUpperCase());
+const generate = (dir, functionName, inputs) => {
+    const langPath = path.join(dir, "js")
+    fs.mkdirSync(langPath, { recursive: true })
 
     const mainCode = MAIN
         .replace(/{FUNCTION_NAME}/g, functionName)
@@ -48,7 +49,7 @@ const generate = (dir, langPath, inputs) => {
 
     fs.writeFileSync(path.join(langPath, "main.js"), mainCode)
     fs.writeFileSync(path.join(langPath, "solution.js"), solutionFile)
-    console.log("Generated 🎉")
+    console.log("Generated JavaScript 🎉")
 }
 
 exports.generateJS = generate;

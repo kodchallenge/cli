@@ -48,9 +48,9 @@ const types = {
     }
 }
 
-const generate = (dir, langPath, inputs) => {
-    const functionName = path.basename(dir).replace(/-./g, x => x[1].toUpperCase());
-
+const generate = (dir, functionName, inputs) => {
+   const langPath = path.join(dir, "c")
+   fs.mkdirSync(langPath, { recursive: true })
     const mainCode = MAIN_CODE
         .replace("{FUNCTION_NAME}", functionName)
         .replace("{VERIABLES}", inputs.map((x, i) => `${types[x.type].name} ${x.name} = ${types[x.type].parser(`argv[${i + 1}]`)};`).join("\n\t") ?? "")
@@ -67,7 +67,7 @@ const generate = (dir, langPath, inputs) => {
     fs.writeFileSync(path.join(langPath, "main.c"), mainCode)
     fs.writeFileSync(path.join(langPath, "solution.h"), solutionHeader)
     fs.writeFileSync(path.join(langPath, "solution.c"), solutionFile)
-    console.log("Generated 🎉")
+    console.log("Generated C 🎉")
 }
 
 exports.generateC = generate;

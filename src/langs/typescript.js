@@ -36,9 +36,10 @@ const types = {
     }
 }
 
-const generate = (dir, langPath, inputs) => {
-    const functionName = path.basename(dir).replace(/-./g, x => x[1].toUpperCase());
-
+const generate = (dir, functionName, inputs) => {
+   const langPath = path.join(dir, "ts")
+   fs.mkdirSync(langPath, { recursive: true })
+    console.log()
     const mainCode = MAIN
         .replace(/{FUNCTION_NAME}/g, functionName)
         .replace("{VERIABLES}", inputs.map((x, i) => `${types[x.type].name} ${x.name}: ${types[x.type].type} = ${types[x.type].parser(`argv[${i}]`)};`).join("\n") ?? "")
@@ -50,7 +51,7 @@ const generate = (dir, langPath, inputs) => {
 
     fs.writeFileSync(path.join(langPath, "main.ts"), mainCode)
     fs.writeFileSync(path.join(langPath, "solution.ts"), solutionFile)
-    console.log("Generated 🎉")
+    console.log("Generated TypeScript 🎉")
 }
 
 exports.generateTS = generate;

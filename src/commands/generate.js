@@ -12,18 +12,11 @@ exports.generate = () => {
     try {
         const args = require("yargs").argv
         const lang = args.lang;
-        if (!lang)
-            throw new Error("--lang argument is required")
 
-        const language = languages[lang]
-        if (!language)
-            throw new Error("--lang is invalid.")
-
-        const dir = args.dir ?? process.cwd();
-
-        const langPath = path.join(dir, lang)
-        fs.mkdirSync(langPath, { recursive: true })
-
+        const basePath = args.dir ?? process.cwd();
+        const name = args.name ?? ""
+        const dir = path.join(basePath, name)
+        const functionName = name.replace(/-./g, x => x[1].toUpperCase()); // kebab case to camel case
 
         const problemArgs = (args.args ?? "").split(",");
         const inputs = problemArgs.filter(x => x?.includes(":")).map(x => {
@@ -35,8 +28,19 @@ exports.generate = () => {
                 name: tiles[0]
             }
         })
-        language.generate(dir, langPath, inputs)
-        
+        console.log(lang)
+        if(lang) {
+            const language = languages[lang]
+            if (!language)
+            throw new Error("--lang is invalid.")
+            language.generate(dir, functionName, inputs)
+            return;
+        }
+        const langs = Object.keys(languages)
+        langs.map(lang => {
+            const language = languages[lang]
+            language.generate(dir, functionName, inputs)
+        })
     } catch (err) {
         console.error(err.message)
     }
