@@ -15,9 +15,15 @@ exports.generate = () => {
 
         const basePath = args.dir ?? process.cwd();
         const name = args.name ?? ""
-        const dir = path.join(basePath, name)
+        if(!name)
+            throw new Error("--name is required.")
+        
+            const dir = path.join(basePath, name)
         const functionName = name.replace(/-./g, x => x[1].toUpperCase()); // kebab case to camel case
-
+        
+        if(!functionName)
+            throw new Error("function name is invalid.")
+        
         const problemArgs = (args.args ?? "").split(",");
         const inputs = problemArgs.filter(x => x?.includes(":")).map(x => {
             const tiles = x.split(":");
