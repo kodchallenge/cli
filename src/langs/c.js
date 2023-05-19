@@ -7,6 +7,27 @@ const MAIN_CODE =
 #include <string.h>
 #include <stdlib.h>
 
+int* getIntArray(char* str) {
+    int* nums = malloc(sizeof(int) * strlen(str) / 2 + 1);
+    char *numsStr = strtok(str, " ");
+    for(int i = 0; numsStr != NULL; i++) {
+        nums[i] = atoi(numsStr);
+        numsStr = strtok(NULL, " ");
+    }
+    return nums;
+}
+
+
+double* getDoubleArray(char* str) {
+    double* nums = malloc(sizeof(double) * strlen(str) / 2 + 1);
+    char *numsStr = strtok(str, " ");
+    for(int i = 0; numsStr != NULL; i++) {
+        nums[i] = atof(numsStr);
+        numsStr = strtok(NULL, " ");
+    }
+    return nums;
+}
+
 int main(int argc, char* argv[]) {
     {VERIABLES}
     {FUNCTION_NAME}({FUNCTION_ARGS});
@@ -45,7 +66,15 @@ const types = {
     double: {
         name: "double",
         parser: (arg) => `atof(${arg})`
-    }
+    },
+    intArr: {
+        name: "int*",
+        parser: (arg) => `getIntArray(${arg})`
+    },
+    doubleArr: {
+        name: "double*",
+        parser: (arg) => `getDoubleArray(${arg})`
+    },
 }
 
 const generate = (dir, functionName, inputs) => {

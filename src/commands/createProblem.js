@@ -27,7 +27,6 @@ exports.createProblem = async () => {
         }
         const problemPath = path.join(dir, slug)
         fs.mkdirSync(problemPath)
-        fs.mkdirSync(path.join(problemPath, "langs"))
         fs.writeFileSync(path.join(problemPath, "description.md"), `# ${slug.split("-").map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(" ")}`)
         fs.writeFileSync(path.join(problemPath, "io.json"), `[\n\t{\n\t\t"input": "",\n\t\t"output": ""\n\t}\n]`)
     } catch (err) {
